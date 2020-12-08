@@ -1,0 +1,10 @@
+.radio-feeling {
+	display: block;
+	margin: 0 5em;
+	cursor: pointer;
+}
+
+.radio-container {
+	display: flex !important;
+	justify-content: space-evenly;
+}

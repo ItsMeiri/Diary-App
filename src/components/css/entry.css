@@ -1,0 +1,52 @@
+.entry-container {
+	background-color: #b7d1f8;
+	height: fit-content;
+	position: relative;
+	display: flex !important;
+	justify-content: space-between;
+	min-height: 10em;
+	padding: 1.2em;
+	margin: 1em auto;
+	border-radius: 0.8em;
+	box-shadow: 0 0 4px rgba(0, 0, 0, 1);
+}
+
+.favorite-icon {
+	position: absolute;
+	right: 0.75em;
+	top: 0.75em;
+	display: inline;
+	color: rgb(192, 163, 2);
+	cursor: pointer;
+}
+
+.icon-container {
+	align-self: center;
+}
+
+.entry-texts > h3 {
+	font-size: 1.4em;
+}
+.entry-texts {
+	margin: 1em 0;
+	max-width: 80%;
+}
+
+.entry-texts > *::selection {
+	background-color: #fad095 !important;
+}
+
+.options-icon {
+	position: absolute;
+	right: 1em;
+	bottom: 1em;
+}
+
+@media (max-width: 550px) {
+	.entry-container {
+		flex-direction: column;
+	}
+	.entry-texts {
+		max-width: inherit;
+	}
+}

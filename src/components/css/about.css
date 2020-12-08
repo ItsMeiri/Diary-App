@@ -1,0 +1,22 @@
+.about-title {
+	text-align: center;
+	padding: 1.5em;
+	text-transform: uppercase;
+	font-size: 2.5em;
+}
+
+.about-content-title {
+	font-size: 2em;
+	margin-bottom: 1em;
+}
+
+.about-content {
+	text-align: justify;
+	box-sizing: border-box;
+	border: 1em double #b58542;
+	background-color: #b7d1f8;
+	padding: 1em;
+	font-size: 1.3em;
+	line-height: 1.5;
+	box-shadow: -1px 37px 96px -41px;
+}
