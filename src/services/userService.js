@@ -29,6 +29,7 @@ export async function getFavoritesList() {
 				headers: {
 					'Content-Type': 'application/json',
 					'x-auth-token': this.getJwt(),
+					'access-control-allow-origin': '*',
 				},
 			}
 		);
@@ -40,10 +41,19 @@ export async function getFavoritesList() {
 }
 
 export async function login(email, password) {
-	const { data } = await Axios.post(`${serverUrl}/auth`, {
-		email,
-		password,
-	});
+	const { data } = await Axios.post(
+		`${serverUrl}/auth`,
+		{
+			email,
+			password,
+		},
+		{
+			headers: {
+				'Content-Type': 'application/json',
+				'access-control-allow-origin': '*',
+			},
+		}
+	);
 	localStorage.setItem(tokenKey, data.token);
 }
 
