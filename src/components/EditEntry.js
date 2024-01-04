@@ -1,19 +1,29 @@
-import React from "react";
-import userService from "../services/userService";
-import { useState } from "react";
-import { Container, Form, Header, Label, Radio, Segment, TextArea } from "semantic-ui-react";
-import "./css/addEntry.css";
-import { Icon } from "semantic-ui-react";
-import { Message } from "semantic-ui-react";
-import { Divider } from "semantic-ui-react";
-import { Input } from "semantic-ui-react";
-import { Button } from "semantic-ui-react";
-import Joi from "joi-browser";
-import Axios from "axios";
+import React from 'react';
+import userService from '../services/userService';
+import { useState } from 'react';
+import {
+	Container,
+	Form,
+	Header,
+	Label,
+	Radio,
+	Segment,
+	TextArea,
+} from 'semantic-ui-react';
+import './css/addEntry.css';
+import { Icon } from 'semantic-ui-react';
+import { Message } from 'semantic-ui-react';
+import { Divider } from 'semantic-ui-react';
+import { Input } from 'semantic-ui-react';
+import { Button } from 'semantic-ui-react';
+import Joi from 'joi-browser';
+import Axios from 'axios';
+import serverUrl from '../services/serverUrl';
 
-const EditEntry = props => {
+const EditEntry = (props) => {
 	let curUser = userService.getCurrentUser();
-	let { title, content, feeling, entry_id } = props.location.state;
+	let { title, content, feeling, entry_id } =
+		props.location.state;
 	const [values, setValues] = useState({
 		title: title,
 		content: content,
@@ -22,17 +32,19 @@ const EditEntry = props => {
 
 	const [errors, setErrors] = useState({});
 	const [submit, setSubmit] = useState(false);
-	const [submitError, setSubmitError] = useState("");
+	const [submitError, setSubmitError] = useState('');
 	const [submitSuccess, setSubmitSuccess] = useState(false);
 
 	let errorStyle = {
-		color: "red",
+		color: 'red',
 	};
 
 	let schema = {
 		title: Joi.string().required().min(6).max(32),
 		content: Joi.string().required().min(6).max(1024),
-		feeling: Joi.string().required().valid("happy", "sad", "neutral"),
+		feeling: Joi.string()
+			.required()
+			.valid('happy', 'sad', 'neutral'),
 	};
 
 	const handleInputChange = (e, { value, name }) => {
@@ -47,7 +59,7 @@ const EditEntry = props => {
 		setValues({ ...values, [name]: value });
 	};
 
-	const doSubmit = e => {
+	const doSubmit = (e) => {
 		e.preventDefault();
 
 		setErrors({});
@@ -57,13 +69,22 @@ const EditEntry = props => {
 		} else {
 			setSubmit(true);
 
-			Axios.put(`http://localhost:4000/api/entries/${entry_id}`, values, { headers: { "Content-Type": "application/json", "x-auth-token": userService.getJwt() } })
-				.then(resp => {
+			Axios.put(
+				`${serverUrl}/api/entries/${entry_id}`,
+				values,
+				{
+					headers: {
+						'Content-Type': 'application/json',
+						'x-auth-token': userService.getJwt(),
+					},
+				}
+			)
+				.then((resp) => {
 					setSubmitSuccess(true);
-					setSubmitError("");
+					setSubmitError('');
 					window.location = `/user/${curUser._id}`;
 				})
-				.catch(err => {
+				.catch((err) => {
 					console.log(err);
 					setSubmitSuccess(false);
 					setSubmitError(err.response.data);
@@ -81,7 +102,9 @@ const EditEntry = props => {
 	};
 
 	const validateForm = () => {
-		let validation = Joi.validate(values, schema, { abortEarly: false });
+		let validation = Joi.validate(values, schema, {
+			abortEarly: false,
+		});
 		const { error } = validation;
 		if (!error) return null;
 		const formErrors = {};
@@ -93,33 +116,147 @@ const EditEntry = props => {
 
 	return (
 		<React.Fragment>
-			<Header as="h1" icon textAlign="center" size="huge" style={{ marginTop: "1em", color: "#6391D6" }}>
-				<Icon name="write" style={{ marginBottom: "0.3em" }} />
+			<Header
+				as="h1"
+				icon
+				textAlign="center"
+				size="huge"
+				style={{ marginTop: '1em', color: '#6391D6' }}
+			>
+				<Icon
+					name="write"
+					style={{ marginBottom: '0.3em' }}
+				/>
 				<Header.Content>Edit your Entry</Header.Content>
 				<Header.Subheader>
-					<strong>Edit an entry for a refreshed perspective.</strong>
+					<strong>
+						Edit an entry for a refreshed perspective.
+					</strong>
 				</Header.Subheader>
 			</Header>
 			<Container as="div" text>
-				<Form method="POST" loading={submit} noValidate autoComplete="off" onSubmit={doSubmit}>
-					{submitError && <Message negative icon="user x" content={submitError} />}
-					{submitSuccess && <Message positive icon="user plus" content="Entry updated successfully!" />}
-					<Form.Field id="title-input" name="title" control={Input} value={values.title} label="Title *" onChange={handleInputChange} />
-					{errors["title"] && <span style={errorStyle}>{errors["title"]}</span>}
+				<Form
+					method="POST"
+					loading={submit}
+					noValidate
+					autoComplete="off"
+					onSubmit={doSubmit}
+				>
+					{submitError && (
+						<Message
+							negative
+							icon="user x"
+							content={submitError}
+						/>
+					)}
+					{submitSuccess && (
+						<Message
+							positive
+							icon="user plus"
+							content="Entry updated successfully!"
+						/>
+					)}
+					<Form.Field
+						id="title-input"
+						name="title"
+						control={Input}
+						value={values.title}
+						label="Title *"
+						onChange={handleInputChange}
+					/>
+					{errors['title'] && (
+						<span style={errorStyle}>
+							{errors['title']}
+						</span>
+					)}
 					{/* <Input required fluid size="large" label="Title *" type="title" name="title" /> */}
 					<Divider hidden />
-					<Form.Field id="content-input" name="content" control={TextArea} label="Content *" value={values.content} placeholder="Content" onChange={handleInputChange} />
-					{errors["content"] && <span style={errorStyle}>{errors["content"]}</span>}
+					<Form.Field
+						id="content-input"
+						name="content"
+						control={TextArea}
+						label="Content *"
+						value={values.content}
+						placeholder="Content"
+						onChange={handleInputChange}
+					/>
+					{errors['content'] && (
+						<span style={errorStyle}>
+							{errors['content']}
+						</span>
+					)}
 					<Divider hidden />
-					<Container textAlign="center" className="radio-container">
-						<Form.Field className="radio-feeling" name="feeling" control={Radio} label={<Icon name="smile outline" size="huge" color={values.feeling === "happy" ? "green" : "grey"} />} value="happy" onClick={handleInputChange} />
-						<Form.Field className="radio-feeling" name="feeling" control={Radio} label={<Icon name="meh outline" size="huge" color={values.feeling === "neutral" ? "orange" : "grey"} />} value="neutral" onClick={handleInputChange} />
-						<Form.Field className="radio-feeling" name="feeling" control={Radio} label={<Icon name="frown outline" size="huge" color={values.feeling === "sad" ? "red" : "grey"} />} value="sad" onClick={handleInputChange} />
+					<Container
+						textAlign="center"
+						className="radio-container"
+					>
+						<Form.Field
+							className="radio-feeling"
+							name="feeling"
+							control={Radio}
+							label={
+								<Icon
+									name="smile outline"
+									size="huge"
+									color={
+										values.feeling === 'happy'
+											? 'green'
+											: 'grey'
+									}
+								/>
+							}
+							value="happy"
+							onClick={handleInputChange}
+						/>
+						<Form.Field
+							className="radio-feeling"
+							name="feeling"
+							control={Radio}
+							label={
+								<Icon
+									name="meh outline"
+									size="huge"
+									color={
+										values.feeling === 'neutral'
+											? 'orange'
+											: 'grey'
+									}
+								/>
+							}
+							value="neutral"
+							onClick={handleInputChange}
+						/>
+						<Form.Field
+							className="radio-feeling"
+							name="feeling"
+							control={Radio}
+							label={
+								<Icon
+									name="frown outline"
+									size="huge"
+									color={
+										values.feeling === 'sad'
+											? 'red'
+											: 'grey'
+									}
+								/>
+							}
+							value="sad"
+							onClick={handleInputChange}
+						/>
 					</Container>
-					{errors["feeling"] && <span style={errorStyle}>"feeling" must by happy, sad or neutral</span>}
+					{errors['feeling'] && (
+						<span style={errorStyle}>
+							"feeling" must by happy, sad or neutral
+						</span>
+					)}
 					<Divider hidden />
 					<Container textAlign="center">
-						<Button size="huge" style={{ backgroundColor: "#6391D6" }} inverted>
+						<Button
+							size="huge"
+							style={{ backgroundColor: '#6391D6' }}
+							inverted
+						>
 							Save
 						</Button>
 					</Container>

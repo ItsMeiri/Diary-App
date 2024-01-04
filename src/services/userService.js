@@ -1,7 +1,8 @@
-import Axios from "axios";
-import jwtDecode from "jwt-decode";
+import Axios from 'axios';
+import jwtDecode from 'jwt-decode';
+import serverUrl from './serverUrl';
 
-const tokenKey = "tokenKey";
+const tokenKey = 'tokenKey';
 
 export function logout() {
 	localStorage.removeItem(tokenKey);
@@ -22,7 +23,15 @@ export function getCurrentUser() {
 
 export async function getFavoritesList() {
 	try {
-		let { data } = await Axios.get(`http://localhost:4000/api/users/favorites/list`, { headers: { "Content-Type": "application/json", "x-auth-token": this.getJwt() } });
+		let { data } = await Axios.get(
+			`${serverUrl}/api/users/favorites/list`,
+			{
+				headers: {
+					'Content-Type': 'application/json',
+					'x-auth-token': this.getJwt(),
+				},
+			}
+		);
 		return data;
 	} catch (err) {
 		console.log(err);
@@ -31,8 +40,17 @@ export async function getFavoritesList() {
 }
 
 export async function login(email, password) {
-	const { data } = await Axios.post(`http://localhost:4000/auth`, { email, password });
+	const { data } = await Axios.post(`${serverUrl}/auth`, {
+		email,
+		password,
+	});
 	localStorage.setItem(tokenKey, data.token);
 }
 
-export default { login, getCurrentUser, logout, getJwt, getFavoritesList };
+export default {
+	login,
+	getCurrentUser,
+	logout,
+	getJwt,
+	getFavoritesList,
+};
