@@ -1,3 +1,2 @@
-const serverUrl =
-	'https://diary-app-server.vercel.app:4000';
+const serverUrl = 'https://diary-app-server.vercel.app';
 export default serverUrl;
